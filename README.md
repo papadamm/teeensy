@@ -45,7 +45,7 @@ By default the generated code will turn on a board-specific LED. Some shell scri
 
 A toolchain needs to be provided by the user and should be passed to the script using CROSS_COMPILE. Usually the toolchain is simply made up by a combo of GCC and Binutils. There is no external code linked in so the dependencies are minimal.
 
-Whenever possible OpenOCD is used to control an external (or on-board) JTAG/SWD debugger to upload code to the target. This makes it possible to keep the same interface regardless of MCU vendor.
+There are instructions included making use of OpenOCD as much as possible. This to control an external (or on-board) JTAG/SWD debugger to upload code to the target. Most likely vendor specific ways also exist. The motivation behind using OpenOCD is to try to keep the same interface regardless of MCU vendor.
 
 The script should work under any Unix system such as Linux and Mac OS X.
 
