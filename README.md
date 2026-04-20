@@ -7,6 +7,7 @@ Information ranges from shell script logic, cross toolchain options, assembly in
 
 The following MCUs and CPU cores are currently included:
 - Microchip atmega328p (AVR)
+- Nordic nRF52811 (ARM Cortex-M4)
 - Nordic nRF52832 (ARM Cortex-M4)
 - STMicro stm32g031j6m6 (ARM Cortex-M0+)
 - STMicro stm32f103c8t6 (ARM Cortex-M3)
