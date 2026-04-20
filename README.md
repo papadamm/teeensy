@@ -10,6 +10,7 @@ The following MCUs and CPU cores are currently included:
 - Nordic nRF52811 (ARM Cortex-M4)
 - Nordic nRF52832 (ARM Cortex-M4)
 - STMicro stm32g031j6m6 (ARM Cortex-M0+)
+- STMicro stm32f100rbt6 (ARM Cortex-M3)
 - STMicro stm32f103c8t6 (ARM Cortex-M3)
 - Atmel at91sam3x8e (ARM Cortex-M3)
 - GigaDevice gd32vf103 (RISC-V RV32IMAC)
