@@ -1,11 +1,17 @@
-# TEEENSY 
-TEEENSY (Also known as super simple sample code) is a set of sample files for microcontrollers. Each script generates a binary from source code that allows control of a board-specific LED on the target.
+# TEEENSY (super simple sample code)
+TEEENSY is a set of sample files for microcontrollers. Each script generates a binary from source code that allows control of a board-specific LED on the target. Not sure if the target board is working? Run this. Not sure if there is some issue with the debugger? Run this. If you can control the LED then at least _something_ is working. After that you're on your own.
 
 The goal with this project is to share practical development information to allow quick deployment of code on a wide range of target systems.
-Information ranges from shell script logic, cross toolchain options, assembly instructions, MCU register internals to JTAG debugger details. 
+Information ranges from shell script logic, cross toolchain options, assembly instructions, MCU register internals to JTAG debugger details.
+
+The name TEEENSY is a bit of a word play. However some of the MCUs are indeed quite small. For instance
+- The STMicro stm32g031 device comes with a total of 8-pins
+- The Taiyo Yuden EYSHSN (mounted on TE8707) measures 8.55mm x 3.25mm x 0.9mm
+  
+Also the assembly code included in the script tends to be a handful of instructions.
 
 
-The following MCUs and CPU cores are currently included:
+The repository contains some degree of support for the following MCUs and CPU cores:
 - Microchip atmega328p (AVR)
 - Nordic nRF52811 (ARM Cortex-M4)
 - Nordic nRF52832 (ARM Cortex-M4)
@@ -33,6 +39,7 @@ The script is typically invoked like this:
 :00000001FF
 %
 ```
+The output of the script may be directed to a file and then programmed onto the device manually by the user.
 
 By default the generated code will turn on a board-specific LED. Some shell scripts takes an argument like "off" to allow generating code that also turns off the LED. The user may locally edit the script to keep generated object files and use objdump or similar to disassemble the generated code and manually compare it with the assembly code in the script to see that all is well. 
 
@@ -45,7 +52,7 @@ The script should work under any Unix system such as Linux and Mac OS X.
 Anyone is welcome to contribute code, but please follow the requirements below:
 - The target board needs to be a mass produced product. No custom boards.
 - A software controllable on-board LED of some sort needs to be present.
-- Ideally a SWD/JTAG debug port should be availale on the target board.
+- Ideally a SWD/JTAG debug port should be available on the target board.
 - A board specific upload method with open source host tools is also acceptable.
 
 Feel free to copy-paste the sample code and use it whichever way you find fit.
