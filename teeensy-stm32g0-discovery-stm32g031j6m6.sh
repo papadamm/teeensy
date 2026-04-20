@@ -18,7 +18,7 @@ ARCH=armv6s-m
 
 # Probe for required software components
 for e in cat grep mktemp rm wc which ${CROSS_COMPILE}gcc ${CROSS_COMPILE}as \
-	     ${CROSS_COMPILE}ld ${CROSS_COMPILE}objdump
+	     ${CROSS_COMPILE}ld ${CROSS_COMPILE}objcopy
 do
     if [ -z `which $e` ]; then
         echo "unable to detect required software component $e, exiting" >&2
