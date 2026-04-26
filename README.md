@@ -18,6 +18,7 @@ The repository contains some degree of support for the following MCUs and CPU co
 - Nordic nRF52832 (ARM Cortex-M4)
 - Nordic nRF52840 (ARM Cortex-M4)
 - Silicon Labs EFM32GG12 (ARM Cortex-M4)
+- STMicro stm32f446zet6u (ARM Cortex-M4)
 - STMicro stm32g031j6m6 (ARM Cortex-M0+)
 - STMicro stm32f100rbt6 (ARM Cortex-M3)
 - STMicro stm32f103c8t6 (ARM Cortex-M3)
