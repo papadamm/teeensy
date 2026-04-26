@@ -7,6 +7,7 @@ Information ranges from shell script logic, cross toolchain options, assembly in
 The name TEEENSY is a bit of a word play. However some of the MCUs are indeed quite small. For instance
 - The STMicro stm32g031 device comes with a total of 8-pins
 - The Taiyo Yuden EYSHSN (mounted on TE8707) measures 8.55mm x 3.25mm x 0.9mm
+- The Seeed Studio XIAO is about the same size as my thumb nail.
   
 Also the assembly code included in the script tends to be a handful of instructions.
 
