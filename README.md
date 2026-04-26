@@ -22,6 +22,7 @@ The repository contains some degree of support for the following MCUs and CPU co
 - STMicro stm32g031j6m6 (ARM Cortex-M0+)
 - STMicro stm32f100rbt6 (ARM Cortex-M3)
 - STMicro stm32f103c8t6 (ARM Cortex-M3)
+- STMicro stm32f207zgt6 (ARM Cortex-M3)
 - Atmel at91sam3x8e (ARM Cortex-M3)
 - GigaDevice gd32vf103 (RISC-V RV32IMAC)
 - Espressif ESP32-S3 (Tensilica Xtensa LX7)
