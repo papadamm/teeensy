@@ -45,7 +45,13 @@ The script is typically invoked like this:
 :00000001FF
 %
 ```
-The output of the script may be directed to a file and then programmed onto the device manually by the user.
+The output of the script may be directed to a file like below and then programmed onto the device manually by the user:
+```console
+% CROSS_COMPILE=~/cross-avr/bin/avr- ./teeensy-seeeduino-nano-atmega328p.sh > file.hex
+% avrdude -c arduino -P /dev/tty.usbserial-0001 -b 115200 -p atmega328p -D -U flash:w:file.hex:i
+%
+```
+In the above example for Seeduino Nano (or other compatible boards like Arduino Nano) the -P parameter might need to be adjusted to match the serial device on your particular system. Also the exact programming sequence varies with board type, for details please have a look at the board specific contents of each script.
 
 By default the generated code will turn on a board-specific LED. Some shell scripts takes an argument like "off" to allow generating code that also turns off the LED. The user may locally edit the script to keep generated object files and use objdump or similar to disassemble the generated code and manually compare it with the assembly code in the script to see that all is well. 
 
