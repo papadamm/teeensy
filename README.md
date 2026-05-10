@@ -20,7 +20,7 @@ The repository contains some degree of support for the following MCUs and CPU co
 - Nordic nRF52811 (ARM Cortex-M4)
 - Nordic nRF52832 (ARM Cortex-M4)
 - Nordic nRF52840 (ARM Cortex-M4)
-- Rarpberry Pi RP2040 (ARM Cortex-M0+)
+- Raspberry Pi RP2040 (ARM Cortex-M0+)
 - Silicon Labs EFM32GG12 (ARM Cortex-M4)
 - STMicro stm32f446zet6u (ARM Cortex-M4)
 - STMicro stm32g031j6m6 (ARM Cortex-M0+)
