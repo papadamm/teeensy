@@ -17,8 +17,9 @@
 ARCH=armv6s-m
 
 # Probe for required software components
-for e in cat grep mktemp rm uuencode wc which ${CROSS_COMPILE}gcc \
-	     ${CROSS_COMPILE}as ${CROSS_COMPILE}ld ${CROSS_COMPILE}objcopy
+for e in bc cat cut grep mktemp od rev rm tr uuencode wc which xxd \
+	    ${CROSS_COMPILE}gcc ${CROSS_COMPILE}as \
+	    ${CROSS_COMPILE}ld ${CROSS_COMPILE}objcopy
 do
     if [ -z `which $e` ]; then
         echo "unable to detect required software component $e, exiting" >&2
@@ -48,10 +49,75 @@ do
     fi
 done
 
+#
+# High-compatibility decimal byte-stream processor (thanks to gemini)
+_crc32 ()
+{
+  file="$1"
+  crc=4294967295
+  poly=3988292384
+
+  # Use od to get decimal bytes, then loop through them
+  for byte in $(od -An -v -tu1 "$file"); do
+    # Calculate next CRC state using bc
+    crc=$(echo "
+    define xor(a, b) {
+    auto res, i, p; res=0; p=1
+    for (i=0; i<32; i++) {
+    if ((a%2) != (b%2)) res += p
+    a /= 2; b /= 2; p *= 2
+    }
+    return res
+    }
+    c = xor($crc, $byte)
+    for (i=0; i<8; i++) {
+    if (c % 2 == 1) c = xor(c / 2, $poly) else c = c / 2
+    }
+    print c
+    " | bc)
+  done
+
+  # Final XOR and Hex output
+  echo "obase=16; define xor(a, b) {
+  auto res, i, p; res=0; p=1
+  for (i=0; i<32; i++) {
+  if ((a%2) != (b%2)) res += p
+  a /= 2; b /= 2; p *= 2
+  }
+  return res
+  }
+  xor($crc, 4294967295)" | bc
+}
+
+bitrev ()
+{
+  xxd -b -c1 | cut -f 2 -d " " | rev | \
+    while read rev_byte
+    do
+      echo "0: ${rev_byte}" | xxd -r -b
+    done
+}
+
+invert ()
+{
+  xxd -b -c1 | cut -f 2 -d " " | \
+    while read byte
+    do
+      inv_byte=`echo ${byte} | tr 0 x | tr 1 0 | tr x 1`
+      echo "0: ${inv_byte}" | xxd -r -b
+    done
+}
+
+eight_chars ()
+{
+   echo 00000000${1} | rev | head -c 8 | rev
+}
+
 # turn on break-on-failure
 set -e
 
-${CROSS_COMPILE}as -mlittle-endian -o "${t0}" <<EOF
+emit_asm () {
+  cat <<EOF
   .syntax unified
   .arch ${ARCH}
 
@@ -112,27 +178,40 @@ end:
   .align 2
   .pool
 EOF
+}
 
-${CROSS_COMPILE}ld --section-start=.text=0x10000100 "${t0}" -o "${t1}"
+# generate a binary from the source, store padded result in FIRST_252
+emit_asm | ${CROSS_COMPILE}as -mlittle-endian -o "${t0}"
+${CROSS_COMPILE}ld --section-start=.text=0x10000000 "${t0}" -o "${t1}"
 ${CROSS_COMPILE}objcopy "${t1}" -O binary "${t0}"
-cat "${t0}" | uuencode - # contents on stdout, used as "file.uue" below
+dd if="${t0}" bs=252 count=1 conv=sync of="${t1}" 2> /dev/null
+FIRST_252=`cat "${t1}" | xxd -ps`
+
+# checksum needs to be present for the bootrom to accept the code
+cat "${t1}" | bitrev > "${t0}" # bitrev the payload before checksumming
+CRCN=`_crc32 "${t0}"` # calculate a regular CRC32
+CRC8=`eight_chars "${CRCN}"` # force 8 characters to work with leading zeroes
+CRC=`echo "${CRC8}" | xxd -r -ps | bitrev | invert | xxd -ps` # rev, inv
+
+# code is in little endian, store checksum in big endian
+( echo ".arch ${ARCH}"; echo ".arm"; echo ".long 0x${CRC}"; ) \
+ | ${CROSS_COMPILE}as -mbig-endian -o "${t0}"
+${CROSS_COMPILE}objcopy "${t0}" -O binary "${t1}"
+
+# uuencode padded code followed by checksum to stdout (used as file.uue below)
+( echo "${FIRST_252}" | xxd -r -ps; cat "${t1}" ) | uuencode -
 
 # use picotool to program the device over USB
 # picotool v2.2.0 is known to work
-#
-# (this teeensy code depends on a boot loader binary "boot2.bin")
-# (see the sparkfun pro micro rp2040 teeensy code for more information)
 #
 # (to clear the device of any user software use "picotool erase")
 # (in the erased state the LED is off by default)
 #
 # (the teeensy code to turn on the LED is flashed like this)
-# 0x10000000: 256-byte Second Stage Bootloader binary "boot2.bin"
-# 0x10000100: teeensy stdout contents converted into a binary
+# 0x10000000: teeensy stdout contents converted into a binary
 # load the single binary file onto the device using picotool 
 # 
-# cat boot2.bin > file.bin
-# cat file.uue | uudecode -o /dev/stdout >> file.bin
+# cat file.uue | uudecode -o /dev/stdout > file.bin
 # picotool load -t bin file.bin
 #
 # (the device needs to be put into BOOTSEL mode before invoking picotool)
