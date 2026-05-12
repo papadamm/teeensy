@@ -108,6 +108,11 @@ invert ()
     done
 }
 
+eight_chars ()
+{
+   echo 00000000${1} | rev | head -c 8 | rev
+}
+
 # turn on break-on-failure
 set -e
 
@@ -182,9 +187,11 @@ ${CROSS_COMPILE}objcopy "${t1}" -O binary "${t0}"
 dd if="${t0}" bs=252 count=1 conv=sync of="${t1}" 2> /dev/null
 FIRST_252=`cat "${t1}" | xxd -ps`
 
-# bitrev the payload for checksumming, calculate crc32, bitrev and invert
-cat "${t1}" | bitrev > "${t0}"
-CRC=`_crc32 "${t0}" | xxd -r -ps | bitrev | invert | xxd -ps`
+# checksum needs to be present for the bootrom to accept the code
+cat "${t1}" | bitrev > "${t0}" # bitrev the payload before checksumming
+CRCN=`_crc32 "${t0}"` # calculate a regular CRC32
+CRC8=`eight_chars "${CRCN}"` # force 8 characters to work with leading zeroes
+CRC=`echo "${CRC8}" | xxd -r -ps | bitrev | invert | xxd -ps` # rev, inv
 
 # code is in little endian, store checksum in big endian
 ( echo ".arch ${ARCH}"; echo ".arm"; echo ".long 0x${CRC}"; ) \
