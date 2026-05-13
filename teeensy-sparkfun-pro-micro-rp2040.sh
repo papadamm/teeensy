@@ -49,7 +49,6 @@ do
     fi
 done
 
-# 
 # High-compatibility decimal byte-stream processor (thanks to gemini)
 _crc32 ()
 {
@@ -207,10 +206,7 @@ ${CROSS_COMPILE}objcopy "${t0}" -O binary "${t1}"
 # (to clear the device of any user software use "picotool erase")
 # (in the erased state the LED is off by default)
 #
-# (the teeensy code to turn on the LED is flashed like this)
-# 0x10000000: teeensy stdout contents converted into a binary
-# load the single binary file onto the device using picotool 
-# 
+# (program the teeensy code to turn on the LED like this to address 0x10000000)
 # cat file.uue | uudecode -o /dev/stdout > file.bin
 # picotool load -t bin file.bin
 #
