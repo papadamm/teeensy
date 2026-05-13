@@ -11,13 +11,14 @@
 # see further down in the file for some RISC-V assembly source code
 #
 # set CROSS_COMPILE to point out the toolchain
-# riscv32-unknown-elf-gcc 6.1.0 and binutils 2.28.51.20170109 are known to work
+# binutils 2.28.51.20170109 (bundled with riscv32-unknown-elf-gcc 6.1.0)
+# is known to work
 
 # Sipeed Longan Nano (GD32VF103CBT6 with a Nuclei Bumblebee RISC-V core)
 ARCH=rv32imac
 
 # Probe for required software components
-for e in cat grep mktemp rm wc which ${CROSS_COMPILE}gcc ${CROSS_COMPILE}as \
+for e in cat grep mktemp rm wc which ${CROSS_COMPILE}as \
 	     ${CROSS_COMPILE}ld ${CROSS_COMPILE}objcopy
 do
     if [ -z `which $e` ]; then
@@ -26,8 +27,8 @@ do
     fi
 done
 
-# Check that CROSS_COMPILE actually points to a cross compiler for RISC-V
-${CROSS_COMPILE}gcc -march=${ARCH} -xc /dev/null -S 2>/dev/null
+# Check that CROSS_COMPILE actually points to an assembler for RISC-V
+${CROSS_COMPILE}as -march=${ARCH} /dev/null -o /dev/null 2>/dev/null
 if [ $? -ne 0 ]; then
     echo "Failed to detect RISC-V support in CROSS_COMPILE, exiting" >&2
     exit 1;
