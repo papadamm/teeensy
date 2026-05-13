@@ -17,7 +17,7 @@
 ARCH=armv6s-m
 
 # Probe for required software components
-for e in bc cat cut grep mktemp od rev rm tr uuencode wc which xxd \
+for e in bc cat cut grep head mktemp od rev rm tr uuencode wc which xxd \
 	    ${CROSS_COMPILE}gcc ${CROSS_COMPILE}as \
 	    ${CROSS_COMPILE}ld ${CROSS_COMPILE}objcopy
 do
