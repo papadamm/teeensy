@@ -17,7 +17,7 @@
 ARCH=armv7e-m
 
 # Probe for required software components
-for e in cat grep mktemp rm wc which ${CROSS_COMPILE}gcc ${CROSS_COMPILE}as \
+for e in cat grep mktemp rm wc which ${CROSS_COMPILE}as \
 	     ${CROSS_COMPILE}ld ${CROSS_COMPILE}objcopy
 do
     if [ -z `which $e` ]; then
@@ -26,8 +26,9 @@ do
     fi
 done
 
-# Check that CROSS_COMPILE actually points to a cross compiler for ARM
-if [[ `${CROSS_COMPILE}gcc -dumpspecs | grep ${ARCH} | wc -l` -eq 0 ]]; then
+# Check that CROSS_COMPILE actually points to an assembler for ARM
+${CROSS_COMPILE}as -march=${ARCH} /dev/null -o /dev/null 2>/dev/null
+if [ $? -ne 0 ]; then
     echo "Failed to detect ARM support in CROSS_COMPILE, exiting" >&2
     exit 1;
 fi
