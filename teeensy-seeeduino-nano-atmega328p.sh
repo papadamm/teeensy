@@ -11,14 +11,13 @@
 # see further down in the file for some AVR assembly source code
 #
 # set CROSS_COMPILE to point out the toolchain
-# avr-gcc 7.3.0 and binutils 2.26.20160125 are known to work
+# binutils 2.26.20160125 (bundled with avr-gcc 7.3.0) is known to work
 
 # Seeeduio Nano uses a ATMEGA328P MCU
 MCU=atmega328p
 
 # Probe for required software components
-for e in cat grep mktemp rm wc which ${CROSS_COMPILE}gcc ${CROSS_COMPILE}as \
-	     ${CROSS_COMPILE}objcopy
+for e in cat grep mktemp rm wc which ${CROSS_COMPILE}as ${CROSS_COMPILE}objcopy
 do
     if [ -z `which $e` ]; then
         echo "unable to detect required software component $e, exiting" >&2
@@ -26,8 +25,9 @@ do
     fi
 done
 
-# Check that CROSS_COMPILE actually points to a cross compiler for AVR
-if [[ `${CROSS_COMPILE}gcc --target-help | grep ${MCU} | wc -l` -eq 0 ]]; then
+# Check that CROSS_COMPILE actually points to an assembler for AVR
+${CROSS_COMPILE}as -mmcu=${MCU} /dev/null -o /dev/null 2>/dev/null
+if [ $? -ne 0 ]; then
     echo "Failed to detect AVR support in CROSS_COMPILE, exiting" >&2
     exit 1;
 fi
