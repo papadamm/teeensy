@@ -104,8 +104,8 @@ cat "${t1}" | uuencode - # the contents come out on stdout
 # (to erase the device, use the erase-flash command. the LED will be off)
 # esptool -p /dev/cu.usbmodem143401 erase-flash 
 #
-# (the output from stdoout needs to be converted using elf2image)
-# cat file.uue > | uudecode -o file.o
+# (the output from stdout needs to be converted using elf2image)
+# cat file.uue | uudecode -o file.o
 # esptool -c esp32s3 elf2image file.o -o file.img
 #
 # (to turn on the LED, load the above software into memory like this)
