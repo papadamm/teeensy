@@ -84,11 +84,11 @@ _start:
   str r0, [r5]
 
   /* ldr r0, =0x20000000 */
-  /* ldr r5, =0x0x40011010 */ /* GPIOC_BSRR */
+  /* ldr r5, =0x40011010 */ /* GPIOC_BSRR */
   /* str r0, [r5] */
 
   /* ldr r0, =0x2000 */
-  /* ldr r5, =0x0x40011010 */ /* GPIOC_BSRR */
+  /* ldr r5, =0x40011010 */ /* GPIOC_BSRR */
   /* str r0, [r5] */
 
 end:
