@@ -17,6 +17,7 @@
 
 # makes use of a rp2040 (with a Cortex-M0+)
 BINUTILS_OPTS="-march=armv6s-m"
+CLANG_OPTS="--target=arm -mcpu=cortex-m0plus"
 
 # Probe for required software components
 for e in bc cat cut grep head mktemp od rev rm tr uuencode wc which xxd \
@@ -29,10 +30,15 @@ do
 done
 
 # Check that CROSS_COMPILE actually points to an assembler for ARM
-${CROSS_COMPILE}as ${BINUTILS_OPTS} /dev/null -o /dev/null 2>/dev/null
+AS_OPTS=${CLANG_OPTS}
+${CROSS_COMPILE}as ${CLANG_OPTS} /dev/null -o /dev/null 2>/dev/null
 if [ $? -ne 0 ]; then
-    echo "Failed to detect ARM support in CROSS_COMPILE, exiting" >&2
-    exit 1;
+    AS_OPTS=${BINUTILS_OPTS}
+    ${CROSS_COMPILE}as ${BINUTILS_OPTS} /dev/null -o /dev/null 2>/dev/null
+    if [ $? -ne 0 ]; then
+        echo "Failed to detect ARM support in CROSS_COMPILE, exiting" >&2
+        exit 1;
+    fi
 fi
 
 cleanup() {
@@ -195,7 +201,7 @@ EOF
 }
 
 # generate a binary from the source, store padded result in FIRST_252
-emit_asm | ${CROSS_COMPILE}as ${BINUTILS_OPTS} -mlittle-endian -o "${t1}"
+emit_asm | ${CROSS_COMPILE}as ${AS_OPTS} -mlittle-endian -o "${t1}"
 ${CROSS_COMPILE}objcopy "${t1}" -O binary "${t0}"
 dd if="${t0}" bs=252 count=1 conv=sync of="${t1}" 2> /dev/null
 FIRST_252=`cat "${t1}" | xxd -ps`
@@ -208,7 +214,7 @@ CRC=`echo "${CRC8}" | xxd -r -ps | bitrev | invert | xxd -ps` # rev, inv
 
 # code is in little endian, store checksum in big endian
 ( echo ".long 0x${CRC}"; ) \
- | ${CROSS_COMPILE}as ${BINUTILS_OPTS} -mbig-endian -o "${t0}"
+ | ${CROSS_COMPILE}as ${AS_OPTS} -mbig-endian -o "${t0}"
 ${CROSS_COMPILE}objcopy "${t0}" -O binary "${t1}"
 
 # uuencode padded code followed by checksum to stdout (used as file.uue below)
