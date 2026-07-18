@@ -19,7 +19,7 @@ BINUTILS_OPTS="-march=armv6s-m"
 
 # Probe for required software components
 for e in bc cat cut grep head mktemp od rev rm tr uuencode wc which xxd \
-	    ${CROSS_COMPILE}as ${CROSS_COMPILE}ld ${CROSS_COMPILE}objcopy
+	    ${CROSS_COMPILE}as ${CROSS_COMPILE}objcopy
 do
     if [ -z `which $e` ]; then
         echo "unable to detect required software component $e, exiting" >&2
@@ -178,8 +178,7 @@ EOF
 }
 
 # generate a binary from the source, store padded result in FIRST_252
-emit_asm | ${CROSS_COMPILE}as ${BINUTILS_OPTS} -mlittle-endian -o "${t0}"
-${CROSS_COMPILE}ld --section-start=.text=0x10000000 "${t0}" -o "${t1}"
+emit_asm | ${CROSS_COMPILE}as ${BINUTILS_OPTS} -mlittle-endian -o "${t1}"
 ${CROSS_COMPILE}objcopy "${t1}" -O binary "${t0}"
 dd if="${t0}" bs=252 count=1 conv=sync of="${t1}" 2> /dev/null
 FIRST_252=`cat "${t1}" | xxd -ps`
