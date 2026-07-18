@@ -164,6 +164,10 @@ dly:
   subs r4, #1
   bne loop2
 
+  /* force the data pin low as final step */
+  ldr r6, =(0xd0000018 + 0x0000) /* GPIO_OUT_CLR (normal alias) */
+  str r0, [r6] /* this turns on U3 */
+
 end:
   b end
 
