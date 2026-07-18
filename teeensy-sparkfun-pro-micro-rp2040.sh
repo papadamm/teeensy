@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: MIT
 #
 # teeensy-sparkfun-pro-micro-rp2040.sh (super simple sample code)
-# this code for "Sparkfun Pro Micro" turns on the WS2812B-2020 LED
+# this code for "Sparkfun Pro Micro" turns on the U3 WS2812-2020 LED
 #
 # Copyright (C) 2026 Magnus Damm
 #
@@ -121,7 +121,7 @@ emit_asm () {
   .global _start
   .type _start, %function
 _start:
-  /* initialize GPIO25 as output for WS2812B-2020 control */
+  /* initialize GPIO25 as output for WS2812-2020 control */
 
   ldr r0, =0x00000120 /* PADS_BANK0 + IO_BANK0 */
   ldr r5, =(0x4000c000 + 0x3000) /* RESET_RESETS (CLR alias) */
@@ -135,7 +135,7 @@ _start:
   ldr r5, =(0xd0000024 + 0x0000) /* GPIO_OE_SET (normal alias) */
   str r0, [r5]
 
-  /* generate a waveform for WS2812B-2020 */
+  /* generate a waveform for WS2812-2020 */
   /* 1 x 300us reset */
   /* 24 x ( T1H (740ns) + T1L (370ns) ) */
 
@@ -166,7 +166,7 @@ dly:
 
   /* force the data pin low as final step */
   ldr r6, =(0xd0000018 + 0x0000) /* GPIO_OUT_CLR (normal alias) */
-  str r0, [r6] /* this turns on U3 */
+  str r0, [r6] /* this turns on U3 WS2812-2020 */
 
 end:
   b end
