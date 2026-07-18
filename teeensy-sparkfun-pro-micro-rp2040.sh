@@ -118,10 +118,6 @@ emit_asm () {
   cat <<EOF
   .syntax unified
 
-  .thumb
-  .thumb_func
-  .text
-  .align 1
   .global _start
   .type _start, %function
 _start:
