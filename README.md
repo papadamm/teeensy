@@ -6,8 +6,8 @@ Information ranges from shell script logic, cross toolchain options, assembly in
 
 The name TEEENSY is a bit of a word play. However some of the MCUs are indeed quite small. For instance
 - The STMicro stm32g031 device comes with a total of 8-pins
-- The Taiyo Yuden EYSHSN (mounted on TE8707) measures 8.55mm x 3.25mm x 0.9mm
-- The Seeed Studio XIAO is about the same size as my thumb nail.
+- The Taiyo Yuden EYSHSN measures 8.55mm x 3.25mm x 0.9mm
+- The Seeed Studio XIAO and Adafruit QT Py are about the same size as my thumb nail
   
 Also the assembly code included in the script tends to be a handful of instructions.
 
@@ -49,7 +49,7 @@ The script is typically invoked like this:
 :00000001FF
 %
 ```
-The output of the script may be directed to a file like below and then programmed onto the device manually by the user:
+The output of the script may be directed to a file and then programmed onto the device manually:
 ```console
 % CROSS_COMPILE=~/cross-avr/bin/avr- ./teeensy-seeeduino-nano-atmega328p.sh > file.hex
 % avrdude -c arduino -P /dev/tty.usbserial-0001 -b 115200 -p atmega328p -D -U flash:w:file.hex:i
