@@ -4,7 +4,7 @@
 # teeensy-adafruit-qt-py-rp2040.sh (super simple sample code)
 # this code for "Adafruit QT Py RP2040" turns on the NEOPIXEL
 # the WS2812B is connected via GPIO11 (NEO_PWR) and GPIO12 (NEOPIX)
-# more information is available at https://adafruit.com/product/4900
+# more information is available at https://www.adafruit.com/product/4900
 #
 # Copyright (C) 2026 Magnus Damm
 #

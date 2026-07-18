@@ -3,6 +3,7 @@
 #
 # teeensy-adafruit-kb2040-rp2040.sh (super simple sample code)
 # this code for "Adafruit KB2040" turns on the NEOPIXEL on GPIO17
+# more information is available at https://www.adafruit.com/product/5302
 #
 # Copyright (C) 2026 Magnus Damm
 #
