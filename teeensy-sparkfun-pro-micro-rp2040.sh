@@ -214,3 +214,70 @@ ${CROSS_COMPILE}objcopy "${t0}" -O binary "${t1}"
 #
 # (the device needs to be put into BOOTSEL mode before invoking picotool)
 # (after programming press S1 RESET to force a reset which turns on the LED)
+#
+# it is also possible to modify the Sparkfun Pro Micro RP2040 to use a hardware debugger
+# solder on a few wires and attach a JTAG/SWD debugger like a Segger J-Link
+#
+# example using Segger J-Link Ultra+ 20-pin JTAG to use SWD pins
+# Power and Ground: 1:VTref-3V3, 4:GND-GND,
+# Debug port: 5:TDI-D, 7:TMS-C (these two are solder points on the back side of the PCB)
+# (Optional Reset: 3:nTRST-/RST)
+#
+# upstream openocd 0.12.0 results in this:
+#
+# openocd -f interface/jlink.cfg -c "transport select swd" \
+#       -c "adapter speed 6000" -f target/rp2040.cfg -c "init; reset"
+# Open On-Chip Debugger 0.12.0
+# Licensed under GNU GPL v2
+# For bug reports, read
+#         http://openocd.org/doc/doxygen/bugs.html
+# swd
+# adapter speed: 6000 kHz
+# 
+# Warn : Transport "swd" was already selected
+# Info : J-Link Ultra V5 compiled Aug 24 2020 10:18:43
+# Info : Hardware version: 5.00
+# Info : VTarget = 3.301 V
+# Info : clock speed 6000 kHz
+# Error: Failed to connect multidrop rp2040.dap0
+#
+# use this not-yet-merged openocd git repo for improved rp2040 support
+# https://github.com/raspberrypi/openocd.git with branch/commit
+# % git log --oneline
+# 3e301b3 (grafted, HEAD -> rp2040-v0.12.0, origin/rp2040-v0.12.0) flash/nor/spi: Add Winbond w25q128jw
+#
+# the default autoconf stuff seems to cause build errors, workaround by disabling some code
+# ./configure --enable-jlink --prefix=~/openocd/rp2040/install --disable-aice \
+#       --disable-usb-blaster-2 --disable-ulink --disable-armjtagew
+# make
+# (fix a few trivial build errors if needed)
+# make install
+#
+# ./install/bin/openocd -f interface/jlink.cfg -c "transport select swd" \
+#       -c "adapter speed 6000" -f target/rp2040.cfg -c "init; reset"
+# Open On-Chip Debugger 0.12.0-g3e301b3-dirty (2026-07-19-01:43)
+# Licensed under GNU GPL v2
+# For bug reports, read
+#         http://openocd.org/doc/doxygen/bugs.html
+# swd
+# adapter speed: 6000 kHz
+# 
+# Warn : Transport "swd" was already selected
+# Info : Hardware thread awareness created
+# Info : Hardware thread awareness created
+# Info : J-Link Ultra V5 compiled Aug 24 2020 10:18:43
+# Info : Hardware version: 5.00
+# Info : VTarget = 3.298 V
+# Info : clock speed 6000 kHz
+# Info : SWD DPIDR 0x0bc12477, DLPIDR 0x00000001
+# Info : SWD DPIDR 0x0bc12477, DLPIDR 0x10000001
+# Info : [rp2040.core0] Cortex-M0+ r0p1 processor detected
+# Info : [rp2040.core0] target has 4 breakpoints, 2 watchpoints
+# Info : [rp2040.core1] Cortex-M0+ r0p1 processor detected
+# Info : [rp2040.core1] target has 4 breakpoints, 2 watchpoints
+# Info : starting gdb server for rp2040.core0 on 3333
+# Info : Listening on port 3333 for gdb connections
+# Info : Listening on port 6666 for tcl connections
+# Info : Listening on port 4444 for telnet connections
+#
+# that's better
