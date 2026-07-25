@@ -15,6 +15,7 @@
 
 # makes use of a Renesas RZ/A1H aka r7s72100 (with a single core Cortex-A9)
 BINUTILS_OPTS="-march=armv7-a"
+CLANG_OPTS="--target=arm -mcpu=cortex-a9"
 
 # Probe for required software components
 for e in cat mktemp rm which ${CROSS_COMPILE}as ${CROSS_COMPILE}objcopy
@@ -26,10 +27,15 @@ do
 done
 
 # Check that CROSS_COMPILE actually points to an assembler for ARM
-${CROSS_COMPILE}as ${BINUTILS_OPTS} /dev/null -o /dev/null 2>/dev/null
+AS_OPTS=${CLANG_OPTS}
+${CROSS_COMPILE}as ${CLANG_OPTS} /dev/null -o /dev/null 2>/dev/null
 if [ $? -ne 0 ]; then
-    echo "Failed to detect ARM support in CROSS_COMPILE, exiting" >&2
-    exit 1;
+    AS_OPTS=${BINUTILS_OPTS}
+    ${CROSS_COMPILE}as ${BINUTILS_OPTS} /dev/null -o /dev/null 2>/dev/null
+    if [ $? -ne 0 ]; then
+        echo "Failed to detect ARM support in CROSS_COMPILE, exiting" >&2
+        exit 1;
+    fi
 fi
 
 cleanup() {
@@ -75,7 +81,7 @@ end:
 EOF
 }
 
-emit_asm | ${CROSS_COMPILE}as ${BINUTILS_OPTS} -mlittle-endian -o "${t0}"
+emit_asm | ${CROSS_COMPILE}as ${AS_OPTS} -mlittle-endian -o "${t0}"
 ${CROSS_COMPILE}objcopy --change-section-address=.text=0x20020000 \
 		"${t0}" -O ihex "${t1}"
 # output hex file to stdout (used as file.hex below)
