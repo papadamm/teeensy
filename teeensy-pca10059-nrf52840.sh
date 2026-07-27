@@ -1,0 +1,116 @@
+#!/bin/sh
+# SPDX-License-Identifier: MIT
+#
+# teeensy-pca10059-nrf52840.sh (also known as super simple sample code)
+# this code for nRF52840 { Dongle } will turn on LED1 connected to P0.06
+#
+# Copyright (C) 2026 Magnus Damm
+#
+# this script builds some bundled tiny example code to generate a binary
+# which may be used to test execution on the target. see further down in
+# the file for some ARM assembly source code
+#
+# set CROSS_COMPILE to point out the toolchain
+# gcc-arm-none-eabi-6-2017-q2-update is known to work
+
+# makes use of a nRF52840 (with a Cortex-M4)
+BINUTILS_OPTS="-march=armv7e-m"
+
+# Probe for required software components
+for e in cat grep mktemp rm wc which ${CROSS_COMPILE}gcc ${CROSS_COMPILE}as \
+	     ${CROSS_COMPILE}ld ${CROSS_COMPILE}objcopy
+do
+    if [ -z `which $e` ]; then
+        echo "unable to detect required software component $e, exiting" >&2
+        exit 1;
+    fi
+done
+
+# Check that CROSS_COMPILE actually points to an assembler for ARM
+${CROSS_COMPILE}as ${BINUTILS_OPTS} /dev/null -o /dev/null 2>/dev/null
+if [ $? -ne 0 ]; then
+    echo "Failed to detect ARM support in CROSS_COMPILE, exiting" >&2
+    exit 1;
+fi
+
+cleanup() {
+    rm -f "${t0}" "${t1}" 2>/dev/null
+}
+
+trap cleanup EXIT
+t0=$(mktemp)
+t1=$(mktemp)
+for e in "${t0}" "${t1}"
+do
+    if [ -z "${e}" ]; then
+        echo "Failed to create temporary file, exiting" >&2
+        exit 1;
+    fi
+done
+
+# turn on break-on-failure
+set -e
+
+emit_asm ()
+{
+cat <<EOF
+  .syntax unified
+
+  .global vector_table
+vector_table:
+  .long 0 /* Top of stack set to nothing since unused */
+  .long _start
+  .space 126 * 4
+
+  .align 1
+  .global _start
+  .type _start, %function
+_start:
+  /* setup P0.06 as output but before that set the GPIO value to high */
+  /* pull the GPIO low to turn on the LED */
+
+  movs r0, #0x40 /* 1 << 6 (P0.06) */
+  ldr r5, =0x50000508 /* nRF52840 GPIO OUTSET */
+  str r0, [r5] /* this makes sure the LED remains off */
+
+  movs r0, #0x03
+  ldr r5, =0x50000718 /* nRF52840 GPIO PIN_CNF[6] (P0.06) */
+  str r0, [r5] /* select output pin function, LED still off */
+EOF
+
+if [ "$1" != "off" ]; then
+cat <<EOF
+  movs r0, #0x40 /* 1 << 6 (P0.06) */
+  ldr r5, =0x5000050c /* nRF52840 GPIO OUTCLR */
+  str r0, [r5] /* clearing the GPIO will make the LED turn on */
+EOF
+fi
+
+cat <<EOF
+end:
+  b end
+
+  .align 2
+  .pool
+EOF
+}
+
+emit_asm $1 | ${CROSS_COMPILE}as ${BINUTILS_OPTS} -mlittle-endian -o "${t0}"
+${CROSS_COMPILE}ld --section-start=.text=0x1000 "${t0}" -o "${t1}"
+${CROSS_COMPILE}objcopy "${t1}" -O ihex "${t0}"
+cat "${t0}" # the contents come out on stdout, used as "file.hex" below
+
+# serial communication over USB was selected as communication method
+#
+# a modern version of nrfutil seems to work well
+# nrfutil 7.12.0 (with nrf5sdk-tools 1.1.0)
+#
+# generate zip file (unsigned and without softdevice)
+# nrfutil nrf5sdk-tools pkg generate --application file.hex \
+#         --application-version 1 --hw-version 52 --sd-req 0x0000 file.zip
+#
+# upload to serial port (adjust -p according to your environment)
+# nrfutil nrf5sdk-tools dfu usb-serial --package file.zip \
+#         -p /dev/cu.usbmodemF511521E4D421
+#
+# passing "off" to this script generates a binary that keeps the LED off
