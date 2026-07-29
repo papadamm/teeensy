@@ -102,3 +102,19 @@ cat "${t1}"
 # resume 0x20020000
 #
 # (note that a zero ohm resistor is needed for the reset signal)
+#
+# In case reset does not seem to function as expected, consider loading
+# U-Boot onto on-chip RAM using a JTAG and execute the teeensy code there:
+#
+# https://github.com/papadamm/random/blob/main/u-boot-gr-peach/README.md
+#
+# Follow the instructions above, then use OpenOCD to halt U-Boot and
+# load the teeensy binary into on-chip memory:
+# (from OpenOCD)
+# halt
+# load_image file.hex
+# resume
+# (from U-Boot)
+# go 0x20020000
+#
+# ...and the LED gets turned on, yay
