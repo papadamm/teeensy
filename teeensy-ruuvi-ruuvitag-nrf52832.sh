@@ -1,7 +1,7 @@
 #!/bin/sh
 # SPDX-License-Identifier: MIT
 #
-# teeensy-ruuvitag-nRF52832.sh (also known as super simple sample code)
+# teeensy-ruuvi-ruuvitag-nrf52832.sh (also known as super simple sample code)
 # this code for RuuviTag will turn on LED2 connected to P0.19
 #
 # Copyright (C) 2026 Magnus Damm
