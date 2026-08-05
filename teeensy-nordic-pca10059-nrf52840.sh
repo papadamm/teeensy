@@ -1,7 +1,7 @@
 #!/bin/sh
 # SPDX-License-Identifier: MIT
 #
-# teeensy-pca10059-nrf52840.sh (also known as super simple sample code)
+# teeensy-nordic-pca10059-nrf52840.sh (also known as super simple sample code)
 # this code for nRF52840 { Dongle } will turn on LED1 connected to P0.06
 #
 # Copyright (C) 2026 Magnus Damm

@@ -1,7 +1,7 @@
 #!/bin/sh
 # SPDX-License-Identifier: MIT
 #
-# teeensy-pca10040-nrf52832.sh (also known as super simple sample code)
+# teeensy-nordic-pca10040-nrf52832.sh (also known as super simple sample code)
 # this code for nRF52-DK will turn on LED1 connected to P0.17
 #
 # Copyright (C) 2026 Magnus Damm
