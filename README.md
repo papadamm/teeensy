@@ -25,6 +25,7 @@ The repository contains some degree of support for the following MCUs and CPU co
 - Raspberry Pi RP2040 (ARM Cortex-M0+)
 - Renesas RZ/A1H r7s72100 (ARM Cortex-A9)
 - Renesas RZ/A2M r7s9210 (ARM Cortex-A9)
+- Renesas sh7751r (SuperH SH4)
 - Silicon Labs EFM32GG12 (ARM Cortex-M4)
 - STMicro stm32f446zet6u (ARM Cortex-M4)
 - STMicro stm32g031j6m6 (ARM Cortex-M0+)
