@@ -62,7 +62,7 @@ In the above example for Seeduino Nano (or other compatible boards like Arduino 
 
 By default the generated code will turn on a board-specific LED. Some shell scripts takes an argument like "off" to allow generating code that also turns off the LED. The user may locally edit the script to keep generated object files and use objdump or similar to disassemble the generated code and manually compare it with the assembly code in the script to see that all is well. 
 
-A toolchain needs to be provided by the user and should be passed to the script using CROSS_COMPILE. Usually the toolchain is simply made up by a combo of GCC and Binutils. There is no external code linked in so the dependencies are minimal.
+A toolchain needs to be provided by the user and should be passed to the script using CROSS_COMPILE. Usually the toolchain is simply made up by GNU Binutils configured for the target. On a few targets CLANG is supported as well and sometimes GCC is required to probe. There is no external code linked in so the dependencies are minimal.
 
 There are instructions included making use of OpenOCD as much as possible. This to control an external (or on-board) JTAG/SWD debugger to upload code to the target. Most likely vendor specific ways also exist. The motivation behind using OpenOCD is to try to keep the same interface regardless of MCU vendor.
 
