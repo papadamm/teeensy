@@ -18,6 +18,7 @@ The repository contains some degree of support for the following MCUs and CPU co
 - Espressif ESP32 (Tensilica Xtensa LX6)
 - Espressif ESP32-S3 (Tensilica Xtensa LX7)
 - GigaDevice gd32vf103 (RISC-V RV32IMAC)
+- Intel x1000 (x86 i586)
 - Microchip atmega328p (AVR)
 - Nordic nRF52811 (ARM Cortex-M4)
 - Nordic nRF52832 (ARM Cortex-M4)
