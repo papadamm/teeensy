@@ -12,13 +12,13 @@ The name TEEENSY is a bit of a word play. However some of the MCUs are indeed qu
 Also the assembly code included in the script tends to be a handful of instructions.
 
 
-The repository contains some degree of support for the following MCUs and CPU cores:
+The repository contains some degree of support for the following MCU/SoC (CPU core) [Instruction set]:
 - Atmel at91sam3x8e (ARM Cortex-M3)
 - Espressif ESP8266EX (Tensilica Xtensa LX6)
 - Espressif ESP32 (Tensilica Xtensa LX6)
 - Espressif ESP32-S3 (Tensilica Xtensa LX7)
-- GigaDevice gd32vf103 (RISC-V RV32IMAC)
-- Intel x1000 (x86 i586)
+- GigaDevice gd32vf103 (Nuclei Bumblebee) [RISC-V RV32IMAC]
+- Intel x1000 (Quark) [x86 i586]
 - Microchip atmega328p (AVR)
 - Nordic nRF52811 (ARM Cortex-M4)
 - Nordic nRF52832 (ARM Cortex-M4)
@@ -33,6 +33,7 @@ The repository contains some degree of support for the following MCUs and CPU co
 - STMicro stm32f100rbt6 (ARM Cortex-M3)
 - STMicro stm32f103c8t6 (ARM Cortex-M3)
 - STMicro stm32f207zgt6 (ARM Cortex-M3)
+- WCH ch32v003 (QingKe V2A) [RISC-V RV32EC]
 
 
 Each file is a self-contained shell script that includes:
