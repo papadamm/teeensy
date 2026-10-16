@@ -57,7 +57,7 @@ cat <<EOF
 EOF
 if [ "${1}" == "off" ]; then
 cat <<EOF
-  /* set bit 2 in PORTE.OUTCLR to set PE02 low (and turn on LED) */
+  /* set bit 2 in PORTE.OUTCLR to set PE02 low (and turn off LED) */
   ldi r18, 1 << 2 /* bit 2 from PE02 */
   sts 0x0486 ,r18 /* PORTE.OUTCLR */
 EOF
