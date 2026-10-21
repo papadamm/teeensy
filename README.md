@@ -19,7 +19,8 @@ The repository contains some degree of support for the following MCU/SoC (CPU co
 - Espressif ESP32-S3 (Tensilica Xtensa LX7)
 - GigaDevice gd32vf103 (Nuclei Bumblebee) [RISC-V RV32IMAC]
 - Intel x1000 (Quark) [x86 i586]
-- Microchip atmega328p (AVR)
+- Microchip atmega328p (AVR AVRe+)
+- Microchip atmega4809 (AVR AVRxt)
 - Nordic nRF52811 (ARM Cortex-M4)
 - Nordic nRF52832 (ARM Cortex-M4)
 - Nordic nRF52840 (ARM Cortex-M4)
