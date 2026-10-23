@@ -14,7 +14,7 @@
 # gcc-arm-none-eabi-6-2017-q2-update is known to work
 
 # makes use of a stm32h743 (with a Cortex-M7)
-ARCH=armv7-m
+ARCH=armv7e-m
 
 # Probe for required software components
 for e in cat grep mktemp rm wc which ${CROSS_COMPILE}as \
