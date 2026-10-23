@@ -34,6 +34,7 @@ The repository contains some degree of support for the following MCU/SoC (CPU co
 - STMicro stm32f100rbt6 (ARM Cortex-M3)
 - STMicro stm32f103c8t6 (ARM Cortex-M3)
 - STMicro stm32f207zgt6 (ARM Cortex-M3)
+- STMicro stm32h743 (ARM Cortex-M7)
 - WCH ch32v003 (QingKe V2A) [RISC-V RV32EC]
 - WCH ch32v203 (QingKe V4B) [RISC-V RV32IMAC]
 
